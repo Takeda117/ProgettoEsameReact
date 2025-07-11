@@ -1,149 +1,244 @@
-import { Card } from '@ui';
+// src/pages/CompendiumPage.jsx - SOSTITUISCI TUTTO
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    fetchRaces,
+    fetchClasses,
+    fetchFeats,
+    fetchWeapons,
+    fetchArmors
+} from '@store/characterSlice';
+import { useListFilters } from '@hooks/useListFilters';
+import ListControls from '@components/ListControls';
+import CompendiumNavigation from '@compendium/CompendiumNavigation';
+import CompendiumDetails from '@compendium/CompendiumDetails';
+import { Container, Card, Modal } from '@ui';
 
-const CompendiumDetails = ({ item, section }) => {
-    const getSectionInfo = (section, item) => {
-        const sectionMap = {
-            races: {
-                icon: '🧝',
-                title: 'Razza',
-                description: `La razza ${item} offre caratteristiche uniche e abilità speciali che influenzano il gameplay del personaggio.`,
-                traits: [
-                    'Bonus alle caratteristiche',
-                    'Abilità razziali uniche',
-                    'Resistenze specifiche',
-                    'Linguaggi conosciuti'
-                ]
-            },
-            classes: {
-                icon: '⚔️',
-                title: 'Classe',
-                description: `La classe ${item} determina le abilità primarie, i punti ferita e lo stile di combattimento del personaggio.`,
-                traits: [
-                    'Punti ferita per livello',
-                    'Competenze in armi e armature',
-                    'Abilità di classe speciali',
-                    'Progressione dei livelli'
-                ]
-            },
-            feats: {
-                icon: '✨',
-                title: 'Talento',
-                description: `Il talento ${item} conferisce al personaggio abilità speciali e bonus che migliorano le sue capacità.`,
-                traits: [
-                    'Prerequisiti richiesti',
-                    'Benefici conferiti',
-                    'Utilizzi per riposo',
-                    'Sinergie con altre abilità'
-                ]
-            },
-            weapons: {
-                icon: '🗡️',
-                title: 'Arma',
-                description: `L'arma ${item} è uno strumento di combattimento con caratteristiche specifiche per il combattimento.`,
-                traits: [
-                    'Danno inferto',
-                    'Proprietà speciali',
-                    'Categoria di peso',
-                    'Competenza richiesta'
-                ]
-            },
-            armors: {
-                icon: '🛡️',
-                title: 'Armatura',
-                description: `L'armatura ${item} fornisce protezione e modifica le statistiche difensive del personaggio.`,
-                traits: [
-                    'Classe Armatura (CA)',
-                    'Bonus massimo Destrezza',
-                    'Penalità ai controlli',
-                    'Velocità di movimento'
-                ]
-            }
-        };
+const CompendiumPage = () => {
+    const dispatch = useDispatch();
+    const { races, classes, feats, weapons, armors, loading } = useSelector((state) => state.character);
 
-        return sectionMap[section] || {
-            icon: '📜',
-            title: 'Elemento',
-            description: `Informazioni su ${item}.`,
-            traits: ['Caratteristiche base']
+    const [activeSection, setActiveSection] = useState('races');
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const sections = useMemo(() => [
+        { id: 'races', label: 'Razze', data: races, fetchAction: fetchRaces, icon: '🧝' },
+        { id: 'classes', label: 'Classi', data: classes, fetchAction: fetchClasses, icon: '⚔️' },
+        { id: 'feats', label: 'Talenti', data: feats, fetchAction: fetchFeats, icon: '✨' },
+        { id: 'weapons', label: 'Armi', data: weapons, fetchAction: fetchWeapons, icon: '🗡️' },
+        { id: 'armors', label: 'Armature', data: armors, fetchAction: fetchArmors, icon: '🛡️' }
+    ], [races, classes, feats, weapons, armors]);
+
+    // Configurazione filtri per sezione attiva
+    const filterConfig = useMemo(() => {
+        return {
+            searchFields: ['name'],
+            defaultSort: 'name',
+            filterOptions: []
         };
+    }, []);
+
+    // Dati della sezione attiva
+    const currentData = useMemo(() => {
+        const currentSection = sections.find(s => s.id === activeSection);
+        return currentSection ? currentSection.data.map(name => ({ name, section: activeSection })) : [];
+    }, [activeSection, sections]);
+
+    // Hook per filtri con persistenza URL
+    const {
+        processedData: filteredItems,
+        originalCount,
+        filteredCount,
+        searchTerm,
+        sortBy,
+        sortOrder,
+        filters,
+        hasActiveFilters,
+        onSearchChange,
+        onFilterChange,
+        onSortChange,
+        onClearFilters
+    } = useListFilters(currentData, filterConfig);
+
+    useEffect(() => {
+        const currentSection = sections.find(s => s.id === activeSection);
+        if (currentSection && currentSection.data.length === 0) {
+            dispatch(currentSection.fetchAction());
+        }
+    }, [activeSection, sections, dispatch]);
+
+    useEffect(() => {
+        setSelectedItem(null);
+    }, [activeSection]);
+
+    const handleSectionChange = useCallback((sectionId) => {
+        setActiveSection(sectionId);
+        // Reset filtri quando cambia sezione
+        onClearFilters();
+    }, [onClearFilters]);
+
+    const handleItemSelect = useCallback((itemName) => {
+        setSelectedItem(itemName);
+    }, []);
+
+    const handleCloseDetails = useCallback(() => {
+        setSelectedItem(null);
+    }, []);
+
+    const getSectionEmoji = (section) => {
+        const emojiMap = {
+            races: '🧝',
+            classes: '⚔️',
+            feats: '✨',
+            weapons: '🗡️',
+            armors: '🛡️'
+        };
+        return emojiMap[section] || '📜';
     };
 
-    const info = getSectionInfo(section, item);
+    const currentSection = sections.find(s => s.id === activeSection);
+    const sectionTitle = currentSection ? `${currentSection.icon} ${currentSection.label} D&D` : 'Compendium';
+
+    const renderContent = () => {
+        if (loading) {
+            return (
+                <div className="dashboard-section">
+                    <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
+                        <p className="text-body">🔄 Caricamento del compendio...</p>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <>
+                {/* Controlli di filtro */}
+                <ListControls
+                    searchTerm={searchTerm}
+                    onSearchChange={onSearchChange}
+                    sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    onSortChange={onSortChange}
+                    filters={filters}
+                    onFilterChange={onFilterChange}
+                    onClearFilters={onClearFilters}
+                    hasActiveFilters={hasActiveFilters}
+                    originalCount={originalCount}
+                    filteredCount={filteredCount}
+                    filterOptions={filterConfig.filterOptions}
+                    placeholder={`Cerca in ${currentSection?.label.toLowerCase()}...`}
+                    title={`Ricerca ${currentSection?.label}`}
+                    quickSortFields={['name']}
+                    showQuickSorts={false}
+                />
+
+                {/* Lista elementi */}
+                <div className="dashboard-section">
+                    <div className="dashboard-section-title" style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: 'var(--space-6)'
+                    }}>
+                        <h2>{sectionTitle}</h2>
+                    </div>
+
+                    {filteredItems.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
+                            <p className="text-body">
+                                {originalCount === 0
+                                    ? '📭 Nessun elemento disponibile'
+                                    : `🔍 Nessun risultato trovato per "${searchTerm}"`
+                                }
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-auto">
+                            {filteredItems.map((item, index) => (
+                                <Card
+                                    key={index}
+                                    padding="md"
+                                    shadow="sm"
+                                    hoverable
+                                    clickable
+                                    onClick={() => handleItemSelect(item.name)}
+                                    className="ornate-border"
+                                >
+                                    <Card.Body style={{ textAlign: 'center' }}>
+                                        <div style={{
+                                            fontSize: 'var(--font-size-2xl)',
+                                            marginBottom: 'var(--space-2)'
+                                        }}>
+                                            {getSectionEmoji(activeSection)}
+                                        </div>
+                                        <Card.Title as="h4" style={{
+                                            margin: 0,
+                                            fontSize: 'var(--font-size-lg)'
+                                        }}>
+                                            {item.name}
+                                        </Card.Title>
+                                    </Card.Body>
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </>
+        );
+    };
 
     return (
-        <div>
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-3)',
-                marginBottom: 'var(--space-4)'
-            }}>
-                <div style={{ fontSize: 'var(--font-size-3xl)' }}>
-                    {info.icon}
+        <div className="page-container">
+            {/* Header del Compendium */}
+            <div className="page-header">
+                <h1 className="page-title">📚 Compendium D&D</h1>
+                <p className="page-subtitle">La tua biblioteca di conoscenze fantasy</p>
+            </div>
+
+            {/* Navigation */}
+            <div className="dashboard-section">
+                <CompendiumNavigation
+                    sections={sections}
+                    activeSection={activeSection}
+                    onSectionChange={handleSectionChange}
+                />
+            </div>
+
+            {/* Content Layout */}
+            <Container maxWidth="full">
+                <div className="grid grid-1" style={{ gap: 'var(--space-6)' }}>
+                    {/* Main Content */}
+                    <div>
+                        {renderContent()}
+                    </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                    <p style={{
-                        margin: 0,
-                        fontStyle: 'italic',
-                        color: 'var(--color-iron)',
-                        fontSize: 'var(--font-size-sm)'
-                    }}>
-                        {info.title}
-                    </p>
-                </div>
-            </div>
+            </Container>
 
-            <Card.Text style={{ marginBottom: 'var(--space-4)' }}>
-                {info.description}
-            </Card.Text>
+            {/* Details Modal */}
+            <Modal
+                isOpen={!!selectedItem}
+                onClose={handleCloseDetails}
+                size="lg"
+            >
+                <Modal.Header>
+                    <Modal.Title>
+                        {getSectionEmoji(activeSection)} {selectedItem}
+                    </Modal.Title>
+                    <Modal.CloseButton onClick={handleCloseDetails} />
+                </Modal.Header>
 
-            <div style={{ marginBottom: 'var(--space-4)' }}>
-                <h4 className="text-heading" style={{
-                    fontSize: 'var(--font-size-lg)',
-                    marginBottom: 'var(--space-3)',
-                    color: 'var(--color-primary-600)'
-                }}>
-                    📋 Caratteristiche Principali:
-                </h4>
-
-                <ul style={{
-                    listStyle: 'none',
-                    padding: 0,
-                    margin: 0
-                }}>
-                    {info.traits.map((trait, index) => (
-                        <li key={index} style={{
-                            padding: 'var(--space-2) 0',
-                            borderBottom: '1px solid var(--color-stone)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 'var(--space-2)'
-                        }}>
-                            <span style={{ color: 'var(--color-primary-500)' }}>•</span>
-                            <Card.Text style={{ margin: 0 }}>
-                                {trait}
-                            </Card.Text>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            <div style={{
-                background: 'var(--color-info-light)',
-                padding: 'var(--space-4)',
-                borderRadius: 'var(--radius-lg)',
-                border: '2px solid var(--color-info)'
-            }}>
-                <Card.Text style={{
-                    margin: 0,
-                    fontStyle: 'italic',
-                    color: 'var(--color-info)'
-                }}>
-                    💡 <strong>Suggerimento:</strong> Consulta il manuale del giocatore per informazioni dettagliate su regole specifiche e interazioni con altre abilità.
-                </Card.Text>
-            </div>
+                <Modal.Body>
+                    {selectedItem && (
+                        <CompendiumDetails
+                            item={selectedItem}
+                            section={activeSection}
+                            onClose={handleCloseDetails}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
         </div>
     );
 };
 
-export default CompendiumDetails;
+export default CompendiumPage;
