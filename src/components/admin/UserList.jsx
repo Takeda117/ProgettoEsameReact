@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserManager, CharacterManager, CurrentUserManager } from "@utils/localStorage";
+import { useListFilters } from "@hooks/useListFilters";
+import ListControls from "@components/ListControls";
 import { Button, Modal } from "@ui";
 import styles from '@ui/styles/table.module.css';
 
@@ -9,6 +11,38 @@ const UserList = () => {
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, user: null });
     const currentUser = CurrentUserManager.getCurrentUser();
     const navigate = useNavigate();
+
+    // Configurazione filtri
+    const filterConfig = {
+        searchFields: ['email', 'role'],
+        defaultSort: 'email',
+        filterOptions: [
+            {
+                key: 'role',
+                label: '🎭 Ruolo',
+                options: [
+                    { value: 'admin', label: '👑 Amministratore' },
+                    { value: 'user', label: '⚔️ Avventuriero' }
+                ]
+            }
+        ]
+    };
+
+    // Hook per filtri con persistenza URL
+    const {
+        processedData: filteredUsers,
+        originalCount,
+        filteredCount,
+        searchTerm,
+        sortBy,
+        sortOrder,
+        filters,
+        hasActiveFilters,
+        onSearchChange,
+        onFilterChange,
+        onSortChange,
+        onClearFilters
+    } = useListFilters(users, filterConfig);
 
     const loadUsers = useCallback(() => {
         const all = UserManager.getAllUsers();
@@ -48,6 +82,30 @@ const UserList = () => {
         return role === 'admin' ? 'Amministratore' : 'Avventuriero';
     };
 
+    const createSortableHeader = (field, icon, label) => (
+        <th>
+            <button
+                onClick={() => onSortChange(field, sortBy === field && sortOrder === 'asc' ? 'desc' : 'asc')}
+                style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-1)',
+                    font: 'inherit',
+                    fontWeight: 'inherit'
+                }}
+            >
+                {icon} {label}
+                {sortBy === field && (
+                    <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                )}
+            </button>
+        </th>
+    );
+
     return (
         <div className="page-container">
             <div className="page-header">
@@ -55,70 +113,79 @@ const UserList = () => {
                 <p className="page-subtitle">Amministra gli avventurieri del regno</p>
             </div>
 
-            <div className="dashboard-section">
-                <div className="dashboard-section-title" style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 'var(--space-6)'
-                }}>
-                    <h3>📋 Lista Utenti Registrati</h3>
-                    <span className="text-body">
-                        {users.length} utenti
-                    </span>
-                </div>
+            {/* Controlli di filtro */}
+            <ListControls
+                searchTerm={searchTerm}
+                onSearchChange={onSearchChange}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSortChange={onSortChange}
+                filters={filters}
+                onFilterChange={onFilterChange}
+                onClearFilters={onClearFilters}
+                hasActiveFilters={hasActiveFilters}
+                originalCount={originalCount}
+                filteredCount={filteredCount}
+                filterOptions={filterConfig.filterOptions}
+                placeholder="Cerca per email o ruolo..."
+                title="Filtri Utenti"
+                quickSortFields={['email', 'role']}
+            />
 
-                {users.length === 0 ? (
+            <div className="dashboard-section">
+                {filteredUsers.length === 0 && originalCount === 0 ? (
                     <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
                         <p className="text-body">
                             <em>🏰 Nessun altro utente registrato nel regno.</em>
                         </p>
                     </div>
                 ) : (
-                    <table className={styles.adminTable}>
-                        <thead>
-                            <tr>
-                                <th>📧 Email</th>
-                                <th>🎭 Ruolo</th>
-                                <th>🔧 Azioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.map((user) => (
-                                <tr key={user.email}>
-                                    <td>{user.email}</td>
-                                    <td>
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                                            {getRoleIcon(user.role)}
-                                            {getRoleLabel(user.role)}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style={{
-                                            display: 'flex',
-                                            gap: 'var(--space-2)',
-                                            flexWrap: 'wrap'
-                                        }}>
-                                            <Button
-                                                variant="secondary"
-                                                size="sm"
-                                                onClick={() => navigate(`/user-characters/${encodeURIComponent(user.email)}`)}
-                                            >
-                                                👁️ Vedi personaggi
-                                            </Button>
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                onClick={() => handleDeleteClick(user)}
-                                            >
-                                                🗑️ Elimina
-                                            </Button>
-                                        </div>
-                                    </td>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table className={styles.adminTable}>
+                            <thead>
+                                <tr>
+                                    {createSortableHeader('email', '📧', 'Email')}
+                                    {createSortableHeader('role', '🎭', 'Ruolo')}
+                                    <th>🔧 Azioni</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {filteredUsers.map((user) => (
+                                    <tr key={user.email}>
+                                        <td>{user.email}</td>
+                                        <td>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                                                {getRoleIcon(user.role)}
+                                                {getRoleLabel(user.role)}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div style={{
+                                                display: 'flex',
+                                                gap: 'var(--space-2)',
+                                                flexWrap: 'wrap'
+                                            }}>
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    onClick={() => navigate(`/user-characters/${encodeURIComponent(user.email)}`)}
+                                                >
+                                                    👁️ Vedi personaggi
+                                                </Button>
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={() => handleDeleteClick(user)}
+                                                >
+                                                    🗑️ Elimina
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
 

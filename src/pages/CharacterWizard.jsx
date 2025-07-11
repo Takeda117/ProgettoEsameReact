@@ -70,15 +70,53 @@ const CharacterWizard = () => {
             {loading ? (
                 <p>Caricamento...</p>
             ) : current.field === "name" ? (
-                <div>
-                    <h2>{step + 1}. {current.label}</h2>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "var(--space-4)",
+                        padding: "var(--space-6)",
+                        borderRadius: "var(--radius-ornate)",
+                        background: "var(--gradient-parchment)",
+                        boxShadow: "var(--shadow-base)",
+                    }}
+                    className="ornate-border"
+                >
+                    <h2
+                        style={{
+                            fontFamily: "var(--font-family-heading)",
+                            fontSize: "var(--font-size-2xl)",
+                            fontWeight: "var(--font-weight-semibold)",
+                            color: "var(--color-primary-700)",
+                            margin: 0,
+                        }}
+                        className="text-heading"
+                    >
+                        {step + 1}. {current.label}
+                    </h2>
+
                     <input
                         type="text"
+                        placeholder="Inserisci un nome"
                         value={character.name}
                         onChange={(e) =>
                             setCharacter((prev) => ({ ...prev, name: e.target.value }))
                         }
+                        style={{
+                            width: "100%",
+                            padding: "var(--input-padding-md)",
+                            fontFamily: "var(--font-family-body)",
+                            fontSize: "var(--font-size-base)",
+                            border: "1px solid var(--color-primary-400)",
+                            borderRadius: "var(--radius-md)",
+                            backgroundColor: "var(--color-parchment)",
+                            color: "var(--color-shadow)",
+                            boxShadow: "var(--shadow-sm)",
+                            transition: "var(--transition-glow)",
+                        }}
+                        className="glow-effect"
                     />
+
                     <CharacterSummary character={character} />
                 </div>
             ) : (

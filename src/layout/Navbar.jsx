@@ -16,65 +16,87 @@ export const Navbar = ({ isAdmin }) => {
     return (
         <nav className="navbar">
             <div className="navbar-content">
+                {/* Brand a sinistra */}
                 <div>
                     <Link to={currentUser ? "/" : "/compendium"} className="navbar-brand">
                         🎲 D&D Character Creator
                     </Link>
                 </div>
 
-                <ul className="navbar-links">
-                    <li>
-                        <Link to="/compendium" className="navbar-link">
-                            📚 Compendium
-                        </Link>
-                    </li>
-
-                    {currentUser ? (
-                        // Links per utenti loggati
-                        <>
-                            <li>
-                                <Link to="/" className="navbar-link">
-                                    🏠 Dashboard
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/character-creation" className="navbar-link">
-                                    ⚔️ Crea
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/my-characters" className="navbar-link">
-                                    👥 I miei personaggi
-                                </Link>
-                            </li>
-                            {isAdmin && (
-                                <>
-                                    <li>
-                                        <Link to="/user-list" className="navbar-link">
-                                            👤 Lista Utenti
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/character-list" className="navbar-link">
-                                            📋 Lista Personaggi
-                                        </Link>
-                                    </li>
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        // Links per utenti non loggati
+                {/* Links centralizzati */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flex: 1
+                }}>
+                    <ul className="navbar-links" style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 'var(--space-4)',
+                        margin: 0,
+                        padding: 0,
+                        listStyle: 'none'
+                    }}>
                         <li>
-                            <Link to="/auth" className="navbar-link">
-                                🗝️ Accedi
+                            <Link to="/compendium" className="navbar-link">
+                                📚 Compendium
                             </Link>
                         </li>
-                    )}
-                </ul>
 
+                        {currentUser ? (
+                            // Links per utenti loggati
+                            <>
+                                <li>
+                                    <Link to="/" className="navbar-link">
+                                        🏠 Dashboard
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/character-creation" className="navbar-link">
+                                        ⚔️ Crea
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/my-characters" className="navbar-link">
+                                        👥 I miei personaggi
+                                    </Link>
+                                </li>
+                                {isAdmin && (
+                                    <>
+                                        <li>
+                                            <Link to="/user-list" className="navbar-link">
+                                                👤 Lista Utenti
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/character-list" className="navbar-link">
+                                                📋 Lista Personaggi
+                                            </Link>
+                                        </li>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            // Links per utenti non loggati
+                            <li>
+                                <Link to="/auth" className="navbar-link">
+                                    🗝️ Accedi
+                                </Link>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+
+                {/* User info a destra */}
                 <div className="navbar-user">
                     {currentUser ? (
-                        <div className="navbar-user">
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 'var(--space-3)'
+                        }}>
                             <span className="text-ui">
                                 Ciao, <strong>{currentUser.email}</strong>
                             </span>

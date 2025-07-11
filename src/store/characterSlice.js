@@ -16,8 +16,6 @@ const createCachedThunk = (name, endpoint, cacheKey) => {
     });
 };
 
-
-
 // Configurazione per le risorse
 const resources = [
     { name: 'armors', endpoint: API_ENDPOINTS.ARMOR, cacheKey: 'armors' },

@@ -1,126 +1,149 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    fetchRaces,
-    fetchClasses,
-    fetchFeats,
-    fetchWeapons,
-    fetchArmors
-} from '@store/characterSlice';
-import CompendiumNavigation from '@compendium/CompendiumNavigation';
-import CompendiumList from '@compendium/CompendiumList';
-import CompendiumDetails from '@compendium/CompendiumDetails';
-import { Container } from '@ui';
+import { Card } from '@ui';
 
-const CompendiumPage = () => {
-    const dispatch = useDispatch();
-    const { races, classes, feats, weapons, armors, loading } = useSelector((state) => state.character);
+const CompendiumDetails = ({ item, section }) => {
+    const getSectionInfo = (section, item) => {
+        const sectionMap = {
+            races: {
+                icon: '🧝',
+                title: 'Razza',
+                description: `La razza ${item} offre caratteristiche uniche e abilità speciali che influenzano il gameplay del personaggio.`,
+                traits: [
+                    'Bonus alle caratteristiche',
+                    'Abilità razziali uniche',
+                    'Resistenze specifiche',
+                    'Linguaggi conosciuti'
+                ]
+            },
+            classes: {
+                icon: '⚔️',
+                title: 'Classe',
+                description: `La classe ${item} determina le abilità primarie, i punti ferita e lo stile di combattimento del personaggio.`,
+                traits: [
+                    'Punti ferita per livello',
+                    'Competenze in armi e armature',
+                    'Abilità di classe speciali',
+                    'Progressione dei livelli'
+                ]
+            },
+            feats: {
+                icon: '✨',
+                title: 'Talento',
+                description: `Il talento ${item} conferisce al personaggio abilità speciali e bonus che migliorano le sue capacità.`,
+                traits: [
+                    'Prerequisiti richiesti',
+                    'Benefici conferiti',
+                    'Utilizzi per riposo',
+                    'Sinergie con altre abilità'
+                ]
+            },
+            weapons: {
+                icon: '🗡️',
+                title: 'Arma',
+                description: `L'arma ${item} è uno strumento di combattimento con caratteristiche specifiche per il combattimento.`,
+                traits: [
+                    'Danno inferto',
+                    'Proprietà speciali',
+                    'Categoria di peso',
+                    'Competenza richiesta'
+                ]
+            },
+            armors: {
+                icon: '🛡️',
+                title: 'Armatura',
+                description: `L'armatura ${item} fornisce protezione e modifica le statistiche difensive del personaggio.`,
+                traits: [
+                    'Classe Armatura (CA)',
+                    'Bonus massimo Destrezza',
+                    'Penalità ai controlli',
+                    'Velocità di movimento'
+                ]
+            }
+        };
 
-    const [activeSection, setActiveSection] = useState('races');
-    const [selectedItem, setSelectedItem] = useState(null);
+        return sectionMap[section] || {
+            icon: '📜',
+            title: 'Elemento',
+            description: `Informazioni su ${item}.`,
+            traits: ['Caratteristiche base']
+        };
+    };
 
-    const sections = useMemo(() => [
-        { id: 'races', label: 'Razze', data: races, fetchAction: fetchRaces, icon: '🧝' },
-        { id: 'classes', label: 'Classi', data: classes, fetchAction: fetchClasses, icon: '⚔️' },
-        { id: 'feats', label: 'Talenti', data: feats, fetchAction: fetchFeats, icon: '✨' },
-        { id: 'weapons', label: 'Armi', data: weapons, fetchAction: fetchWeapons, icon: '🗡️' },
-        { id: 'armors', label: 'Armature', data: armors, fetchAction: fetchArmors, icon: '🛡️' }
-    ], [races, classes, feats, weapons, armors]);
-
-    useEffect(() => {
-        const currentSection = sections.find(s => s.id === activeSection);
-        if (currentSection && currentSection.data.length === 0) {
-            dispatch(currentSection.fetchAction());
-        }
-    }, [activeSection, sections, dispatch]);
-
-    useEffect(() => {
-        setSelectedItem(null);
-    }, [activeSection]);
-
-    const handleSectionChange = useCallback((sectionId) => {
-        setActiveSection(sectionId);
-    }, []);
-
-    const handleItemSelect = useCallback((item) => {
-        setSelectedItem(item);
-    }, []);
-
-    const handleCloseDetails = useCallback(() => {
-        setSelectedItem(null);
-    }, []);
-
-    const renderActiveSection = useCallback(() => {
-        if (loading) {
-            return (
-                <div className="dashboard-section">
-                    <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
-                        <p className="text-body">🔄 Caricamento del compendio...</p>
-                    </div>
-                </div>
-            );
-        }
-
-        const currentSection = sections.find(s => s.id === activeSection);
-        if (!currentSection) {
-            return (
-                <div className="dashboard-section">
-                    <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
-                        <p className="text-body">⚠️ Sezione non trovata</p>
-                    </div>
-                </div>
-            );
-        }
-
-        return (
-            <CompendiumList
-                items={currentSection.data}
-                title={`${currentSection.icon} ${currentSection.label} D&D`}
-                onItemSelect={handleItemSelect}
-                section={activeSection}
-            />
-        );
-    }, [loading, sections, activeSection, handleItemSelect]);
+    const info = getSectionInfo(section, item);
 
     return (
-        <div className="page-container">
-            {/* Header del Compendium */}
-            <div className="page-header">
-                <h1 className="page-title">📚 Compendium D&D</h1>
-                <p className="page-subtitle">La tua biblioteca di conoscenze fantasy</p>
-            </div>
-
-            {/* Navigation */}
-            <div className="dashboard-section">
-                <CompendiumNavigation
-                    sections={sections}
-                    activeSection={activeSection}
-                    onSectionChange={handleSectionChange}
-                />
-            </div>
-
-            {/* Content Layout */}
-            <Container maxWidth="full">
-                <div className={`grid ${selectedItem ? 'grid-2' : 'grid-1'}`} style={{ gap: 'var(--space-6)' }}>
-                    {/* Main Content */}
-                    <div>
-                        {renderActiveSection()}
-                    </div>
-
-                    {/* Details Sidebar */}
-                    {selectedItem && (
-                        <div>
-                            <CompendiumDetails
-                                item={selectedItem}
-                                section={activeSection}
-                                onClose={handleCloseDetails}
-                            />
-                        </div>
-                    )}
+        <div>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                marginBottom: 'var(--space-4)'
+            }}>
+                <div style={{ fontSize: 'var(--font-size-3xl)' }}>
+                    {info.icon}
                 </div>
-            </Container>
+                <div style={{ flex: 1 }}>
+                    <p style={{
+                        margin: 0,
+                        fontStyle: 'italic',
+                        color: 'var(--color-iron)',
+                        fontSize: 'var(--font-size-sm)'
+                    }}>
+                        {info.title}
+                    </p>
+                </div>
+            </div>
+
+            <Card.Text style={{ marginBottom: 'var(--space-4)' }}>
+                {info.description}
+            </Card.Text>
+
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+                <h4 className="text-heading" style={{
+                    fontSize: 'var(--font-size-lg)',
+                    marginBottom: 'var(--space-3)',
+                    color: 'var(--color-primary-600)'
+                }}>
+                    📋 Caratteristiche Principali:
+                </h4>
+
+                <ul style={{
+                    listStyle: 'none',
+                    padding: 0,
+                    margin: 0
+                }}>
+                    {info.traits.map((trait, index) => (
+                        <li key={index} style={{
+                            padding: 'var(--space-2) 0',
+                            borderBottom: '1px solid var(--color-stone)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 'var(--space-2)'
+                        }}>
+                            <span style={{ color: 'var(--color-primary-500)' }}>•</span>
+                            <Card.Text style={{ margin: 0 }}>
+                                {trait}
+                            </Card.Text>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div style={{
+                background: 'var(--color-info-light)',
+                padding: 'var(--space-4)',
+                borderRadius: 'var(--radius-lg)',
+                border: '2px solid var(--color-info)'
+            }}>
+                <Card.Text style={{
+                    margin: 0,
+                    fontStyle: 'italic',
+                    color: 'var(--color-info)'
+                }}>
+                    💡 <strong>Suggerimento:</strong> Consulta il manuale del giocatore per informazioni dettagliate su regole specifiche e interazioni con altre abilità.
+                </Card.Text>
+            </div>
         </div>
     );
 };
 
-export default CompendiumPage;
+export default CompendiumDetails;

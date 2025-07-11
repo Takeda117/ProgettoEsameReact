@@ -34,7 +34,6 @@ const Card = ({
     );
 };
 
-// Sub-components - STANDARDIZZATI con pattern array
 const CardHeader = ({ children, className = '', ...props }) => {
     const headerClasses = [styles.header, className].filter(Boolean).join(' ');
 

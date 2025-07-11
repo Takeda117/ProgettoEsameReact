@@ -1,6 +1,6 @@
-import { Card, Button } from '@ui';
+import { Card } from '@ui';
 
-const CompendiumDetails = ({ item, section, onClose }) => {
+const CompendiumDetails = ({ item, section }) => {
     const getSectionInfo = (section, item) => {
         const sectionMap = {
             races: {
@@ -71,98 +71,79 @@ const CompendiumDetails = ({ item, section, onClose }) => {
     const info = getSectionInfo(section, item);
 
     return (
-        <Card padding="lg" shadow="lg" className="magic-glow">
-            <Card.Header>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-                    <div style={{ fontSize: 'var(--font-size-3xl)' }}>
-                        {info.icon}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                        <Card.Title as="h3">
-                            {item}
-                        </Card.Title>
-                        <Card.Text style={{ margin: 0, fontStyle: 'italic' }}>
-                            {info.title}
-                        </Card.Text>
-                    </div>
+        <div>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-3)',
+                marginBottom: 'var(--space-4)'
+            }}>
+                <div style={{ fontSize: 'var(--font-size-3xl)' }}>
+                    {info.icon}
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClose}
-                    style={{
-                        minWidth: 'auto',
-                        padding: 'var(--space-2)'
-                    }}
-                >
-                    ✕
-                </Button>
-            </Card.Header>
-
-            <Card.Body>
-                <Card.Text style={{ marginBottom: 'var(--space-4)' }}>
-                    {info.description}
-                </Card.Text>
-
-                <div style={{ marginBottom: 'var(--space-4)' }}>
-                    <h4 className="text-heading" style={{
-                        fontSize: 'var(--font-size-lg)',
-                        marginBottom: 'var(--space-3)',
-                        color: 'var(--color-primary-600)'
-                    }}>
-                        📋 Caratteristiche Principali:
-                    </h4>
-
-                    <ul style={{
-                        listStyle: 'none',
-                        padding: 0,
-                        margin: 0
-                    }}>
-                        {info.traits.map((trait, index) => (
-                            <li key={index} style={{
-                                padding: 'var(--space-2) 0',
-                                borderBottom: '1px solid var(--color-stone)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 'var(--space-2)'
-                            }}>
-                                <span style={{ color: 'var(--color-primary-500)' }}>•</span>
-                                <Card.Text style={{ margin: 0 }}>
-                                    {trait}
-                                </Card.Text>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div style={{
-                    background: 'var(--color-info-light)',
-                    padding: 'var(--space-4)',
-                    borderRadius: 'var(--radius-lg)',
-                    border: '2px solid var(--color-info)'
-                }}>
-                    <Card.Text style={{
+                <div style={{ flex: 1 }}>
+                    <p style={{
                         margin: 0,
                         fontStyle: 'italic',
-                        color: 'var(--color-info)'
+                        color: 'var(--color-iron)',
+                        fontSize: 'var(--font-size-sm)'
                     }}>
-                        💡 <strong>Suggerimento:</strong> Consulta il manuale del giocatore per informazioni dettagliate su regole specifiche e interazioni con altre abilità.
-                    </Card.Text>
+                        {info.title}
+                    </p>
                 </div>
-            </Card.Body>
+            </div>
 
-            <Card.Footer>
-                <Button
-                    variant="primary"
-                    fullWidth
-                    onClick={onClose}
-                    className="glow-effect"
-                >
-                    🔙 Torna al Compendium
-                </Button>
-            </Card.Footer>
-        </Card>
+            <Card.Text style={{ marginBottom: 'var(--space-4)' }}>
+                {info.description}
+            </Card.Text>
+
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+                <h4 className="text-heading" style={{
+                    fontSize: 'var(--font-size-lg)',
+                    marginBottom: 'var(--space-3)',
+                    color: 'var(--color-primary-600)'
+                }}>
+                    📋 Caratteristiche Principali:
+                </h4>
+
+                <ul style={{
+                    listStyle: 'none',
+                    padding: 0,
+                    margin: 0
+                }}>
+                    {info.traits.map((trait, index) => (
+                        <li key={index} style={{
+                            padding: 'var(--space-2) 0',
+                            borderBottom: '1px solid var(--color-stone)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 'var(--space-2)'
+                        }}>
+                            <span style={{ color: 'var(--color-primary-500)' }}>•</span>
+                            <Card.Text style={{ margin: 0 }}>
+                                {trait}
+                            </Card.Text>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div style={{
+                background: 'var(--color-info-light)',
+                padding: 'var(--space-4)',
+                borderRadius: 'var(--radius-lg)',
+                border: '2px solid var(--color-info)'
+            }}>
+                <Card.Text style={{
+                    margin: 0,
+                    fontStyle: 'italic',
+                    color: 'var(--color-info)'
+                }}>
+                    💡 <strong>Suggerimento:</strong> Consulta il manuale del giocatore per informazioni dettagliate su regole specifiche e interazioni con altre abilità.
+                </Card.Text>
+            </div>
+        </div>
     );
 };
 
-export default CompendiumDetails;
+export default CompendiumDetails; 

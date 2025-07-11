@@ -23,7 +23,8 @@ export default defineConfig({
       '@constant': path.resolve(__dirname, 'src/constant'),
       '@pages': path.resolve(__dirname, 'src/pages'),
       '@compendium': path.resolve(__dirname, 'src/components/compendium'),
-      '@ui': path.resolve(__dirname, 'src/ui')
+      '@ui': path.resolve(__dirname, 'src/ui'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
     }
   }
 })
