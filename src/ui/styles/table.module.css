@@ -1,0 +1,69 @@
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--gradient-parchment);
+    border: 2px solid var(--color-stone-dark);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-6);
+}
+
+.adminTable thead {
+    background: var(--gradient-gold);
+    color: var(--color-void);
+}
+
+.adminTable th {
+    padding: var(--space-4);
+    text-align: left;
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid var(--color-primary-600);
+}
+
+.adminTable td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-stone);
+    font-family: var(--font-family-ui);
+    color: var(--color-shadow);
+    transition: var(--transition-colors);
+}
+
+.adminTable tbody tr:hover {
+    background: var(--color-stone-light);
+}
+
+.adminTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tableLink {
+    color: var(--color-primary-600);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-colors);
+}
+
+.tableLink:hover {
+    color: var(--color-primary-700);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.statsSection {
+    margin-bottom: var(--space-8);
+}
+
+.statsTitle {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-lg);
+    color: var(--color-shadow);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--color-primary-400);
+    display: inline-block;
+}

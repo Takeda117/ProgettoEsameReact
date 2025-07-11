@@ -1,0 +1,88 @@
+.searchContainer {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--space-3) var(--space-12) var(--space-3) var(--space-10);
+    border: 2px solid var(--color-stone-dark);
+    border-radius: var(--radius-xl);
+    font-family: var(--font-family-ui);
+    font-size: var(--font-size-base);
+    background: var(--gradient-parchment);
+    color: var(--color-shadow);
+    transition: var(--transition-all);
+    box-shadow: var(--shadow-sm);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: var(--shadow-glow);
+}
+
+.searchInput::placeholder {
+    color: var(--color-iron);
+    font-style: italic;
+}
+
+.searchIcon {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-iron);
+    pointer-events: none;
+}
+
+.clearButton {
+    position: absolute;
+    right: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--color-iron);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-md);
+    transition: var(--transition-colors);
+}
+
+.clearButton:hover {
+    color: var(--color-shadow);
+    background: var(--color-stone);
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--gradient-parchment);
+    border: 2px solid var(--color-stone-dark);
+    border-top: none;
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-index-dropdown);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion {
+    padding: var(--space-3);
+    cursor: pointer;
+    transition: var(--transition-colors);
+    border-bottom: 1px solid var(--color-stone);
+}
+
+.suggestion:hover,
+.suggestion.highlighted {
+    background: var(--color-stone-light);
+}
+
+.suggestion:last-child {
+    border-bottom: none;
+}

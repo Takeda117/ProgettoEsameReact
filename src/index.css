@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Uncial+Antiqua&display=swap');
+
+:root {
+  /* Paletta di colori */
+
+  /* Primario */
+  --color-primary-50: #fefbf3;
+  --color-primary-100: #fdf4d3;
+  --color-primary-200: #fae8a6;
+  --color-primary-300: #f6d76e;
+  --color-primary-400: #f1c232;
+  --color-primary-500: #d4af37;
+  --color-primary-600: #b8941f;
+  --color-primary-700: #9a7a1a;
+  --color-primary-800: #7d6216;
+  --color-primary-900: #665013;
+
+  /* Secondario */
+  --color-secondary-50: #f4f1ff;
+  --color-secondary-100: #ebe5ff;
+  --color-secondary-200: #d9ceff;
+  --color-secondary-300: #bfa8ff;
+  --color-secondary-400: #a078ff;
+  --color-secondary-500: #8b5cf6;
+  --color-secondary-600: #7c3aed;
+  --color-secondary-700: #6d28d9;
+  --color-secondary-800: #5b21b6;
+  --color-secondary-900: #4c1d95;
+
+  /* Colore elementi naturali */
+  --color-fire: #dc2626;
+  --color-fire-light: #fef2f2;
+  --color-water: #0284c7;
+  --color-water-light: #e0f2fe;
+  --color-earth: #059669;
+  --color-earth-light: #d1fae5;
+  --color-air: #7c3aed;
+  --color-air-light: #f3e8ff;
+
+  /* Colori semantici di risposta utente */
+  --color-success: #16a34a;
+  --color-success-light: #dcfce7;
+  --color-warning: #ea580c;
+  --color-warning-light: #fff7ed;
+  --color-danger: #b91c1c;
+  --color-danger-light: #fef2f2;
+  --color-info: #1d4ed8;
+  --color-info-light: #dbeafe;
+
+  /* Tema scuro */
+  --color-parchment: #f4f1e8;
+  --color-parchment-dark: #e8e3d3;
+  --color-stone-light: #f8f6f0;
+  --color-stone: #e5ddd0;
+  --color-stone-dark: #d4c4a8;
+  --color-leather: #8b4513;
+  --color-iron: #4a5568;
+  --color-shadow: #2d3748;
+  --color-void: #1a202c;
+
+  /*Spaziatura */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  /* 4px */
+  --space-2: 0.5rem;
+  /* 8px */
+  --space-3: 0.75rem;
+  /* 12px */
+  --space-4: 1rem;
+  /* 16px */
+  --space-5: 1.25rem;
+  /* 20px */
+  --space-6: 1.5rem;
+  /* 24px */
+  --space-8: 2rem;
+  /* 32px */
+  --space-10: 2.5rem;
+  /* 40px */
+  --space-12: 3rem;
+  /* 48px */
+  --space-16: 4rem;
+  /* 64px */
+  --space-20: 5rem;
+  /* 80px */
+  --space-24: 6rem;
+  /* 96px */
+
+  /* Font */
+
+  --font-family-title: 'Uncial Antiqua', serif;
+  --font-family-heading: 'Cinzel', serif;
+  --font-family-body: 'Crimson Text', serif;
+  --font-family-ui: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-family-mono: 'Courier New', monospace;
+
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-base: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
+  --font-size-3xl: 1.875rem;
+  /* 30px */
+  --font-size-4xl: 2.25rem;
+  /* 36px */
+  --font-size-5xl: 3rem;
+  /* 48px */
+  --font-size-6xl: 3.75rem;
+  /* 60px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Bordi  */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  /* 4px */
+  --radius-base: 0.375rem;
+  /* 6px */
+  --radius-md: 0.5rem;
+  /* 8px */
+  --radius-lg: 0.75rem;
+  /* 12px */
+  --radius-xl: 1rem;
+  /* 16px */
+  --radius-2xl: 1.5rem;
+  /* 24px */
+  --radius-3xl: 2rem;
+  /* 32px */
+  --radius-ornate: 0.75rem 0.25rem 0.75rem 0.25rem;
+  /* Decorative */
+  --radius-full: 9999px;
+
+  /* Ombreggiature */
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px 0 rgba(139, 69, 19, 0.1);
+  --shadow-base: 0 2px 4px 0 rgba(139, 69, 19, 0.15), 0 1px 2px 0 rgba(139, 69, 19, 0.1);
+  --shadow-md: 0 4px 8px 0 rgba(139, 69, 19, 0.2), 0 2px 4px 0 rgba(139, 69, 19, 0.1);
+  --shadow-lg: 0 8px 16px 0 rgba(139, 69, 19, 0.25), 0 4px 8px 0 rgba(139, 69, 19, 0.15);
+  --shadow-xl: 0 16px 32px 0 rgba(139, 69, 19, 0.3), 0 8px 16px 0 rgba(139, 69, 19, 0.2);
+  --shadow-2xl: 0 24px 48px 0 rgba(139, 69, 19, 0.35);
+  --shadow-inner: inset 0 2px 4px 0 rgba(139, 69, 19, 0.1);
+  --shadow-glow: 0 0 16px rgba(212, 175, 55, 0.5);
+  --shadow-magic: 0 0 20px rgba(124, 58, 237, 0.6);
+
+  /* ===== Gradienti ===== */
+  --gradient-gold: linear-gradient(135deg, var(--color-primary-400) 0%, var(--color-primary-600) 100%);
+  --gradient-parchment: linear-gradient(145deg, var(--color-parchment) 0%, var(--color-parchment-dark) 100%);
+  --gradient-stone: linear-gradient(145deg, var(--color-stone-light) 0%, var(--color-stone-dark) 100%);
+  --gradient-magic: linear-gradient(135deg, var(--color-secondary-400) 0%, var(--color-secondary-700) 100%);
+  --gradient-fire: linear-gradient(135deg, #ff6b35 0%, #dc2626 100%);
+  --gradient-water: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+
+  /* Transizioni */
+  --transition-none: none;
+  --transition-all: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-colors: color 200ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-opacity: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-shadow: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-transform: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-glow: all 300ms ease-out;
+
+  /* profondità z-index */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-toast: 1080;
+
+  /* Componenti */
+
+  /* Button Tokens */
+  --btn-padding-sm: var(--space-2) var(--space-4);
+  --btn-padding-md: var(--space-3) var(--space-6);
+  --btn-padding-lg: var(--space-4) var(--space-8);
+
+  /* Input Tokens */
+  --input-padding-sm: var(--space-2) var(--space-3);
+  --input-padding-md: var(--space-3) var(--space-4);
+  --input-padding-lg: var(--space-4) var(--space-5);
+
+  /* Card Tokens */
+  --card-padding-sm: var(--space-4);
+  --card-padding-md: var(--space-6);
+  --card-padding-lg: var(--space-8);
+}
+
+/*  CSS RESET  */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-family-body);
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-base);
+  color: var(--color-shadow);
+  background: var(--gradient-parchment);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--gradient-parchment);
+  color: var(--color-shadow);
+  font-family: var(--font-family-body);
+  line-height: var(--line-height-normal);
+}
+
+.text-title {
+  font-family: var(--font-family-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.text-heading {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-shadow);
+}
+
+.text-body {
+  font-family: var(--font-family-body);
+  color: var(--color-iron);
+}
+
+.text-ui {
+  font-family: var(--font-family-ui);
+}
+
+.ornate-border {
+  border: 2px solid var(--color-primary-500);
+  border-radius: var(--radius-ornate);
+  background: var(--gradient-parchment);
+  position: relative;
+}
+
+.ornate-border::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: var(--gradient-gold);
+  border-radius: var(--radius-ornate);
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.glow-effect {
+  box-shadow: var(--shadow-glow);
+  transition: var(--transition-glow);
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.8);
+}
+
+.magic-glow {
+  box-shadow: var(--shadow-magic);
+  transition: var(--transition-glow);
+}
+
+
+/* Accessibilità e responsività */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .text-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .text-heading {
+    font-size: var(--font-size-xl);
+  }
+}

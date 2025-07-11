@@ -1,0 +1,115 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.wrapper.fullWidth {
+    width: 100%;
+}
+
+.label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-shadow);
+    margin-bottom: var(--space-1);
+    font-family: var(--font-family-ui);
+}
+
+.required {
+    color: var(--color-danger);
+    margin-left: var(--space-1);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    width: 100%;
+    border: 2px solid var(--color-stone-dark);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family-ui);
+    font-size: var(--font-size-base);
+    color: var(--color-shadow);
+    background: var(--gradient-parchment);
+    transition: var(--transition-all);
+    box-shadow: var(--shadow-sm);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: var(--shadow-glow);
+    background: var(--color-parchment);
+}
+
+.input::placeholder {
+    color: var(--color-iron);
+    font-style: italic;
+}
+
+/* Sizes */
+.input.sm {
+    padding: var(--input-padding-sm);
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-md);
+}
+
+.input.md {
+    padding: var(--input-padding-md);
+    font-size: var(--font-size-base);
+}
+
+.input.lg {
+    padding: var(--input-padding-lg);
+    font-size: var(--font-size-lg);
+    border-radius: var(--radius-xl);
+}
+
+/* With icon */
+.hasIcon {
+    padding-left: 2.5rem;
+}
+
+.icon {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-iron);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* States */
+.error {
+    border-color: var(--color-danger);
+}
+
+.error:focus {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 16px rgba(185, 28, 28, 0.5);
+}
+
+.disabled {
+    background: var(--color-stone-light);
+    color: var(--color-iron);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.errorText {
+    font-size: var(--font-size-sm);
+    color: var(--color-danger);
+    margin-top: var(--space-1);
+    font-family: var(--font-family-ui);
+}
+
+@media (max-width: 768px) {
+    .input {
+        font-size: 16px;
+    }
+}

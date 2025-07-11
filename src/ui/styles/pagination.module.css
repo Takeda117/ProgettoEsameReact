@@ -1,0 +1,74 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    margin: var(--space-6) 0;
+    font-family: var(--font-family-ui);
+}
+
+.pageButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: var(--space-2);
+    border: 2px solid var(--color-stone-dark);
+    border-radius: var(--radius-lg);
+    background: var(--gradient-parchment);
+    color: var(--color-shadow);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-all);
+    cursor: pointer;
+}
+
+.pageButton:hover:not(.disabled) {
+    border-color: var(--color-primary-500);
+    background: var(--color-stone-light);
+    transform: translateY(-1px);
+}
+
+.pageButton.active {
+    background: var(--gradient-gold);
+    border-color: var(--color-primary-600);
+    color: var(--color-void);
+    box-shadow: var(--shadow-md);
+}
+
+.pageButton.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ellipsis {
+    padding: 0 var(--space-2);
+    color: var(--color-iron);
+}
+
+.info {
+    font-size: var(--font-size-sm);
+    color: var(--color-iron);
+    margin: 0 var(--space-4);
+}
+
+.sm .pageButton {
+    min-width: 32px;
+    height: 32px;
+    font-size: var(--font-size-sm);
+}
+
+.lg .pageButton {
+    min-width: 48px;
+    height: 48px;
+    font-size: var(--font-size-lg);
+}
+
+@media (max-width: 768px) {
+    .info {
+        width: 100%;
+        text-align: center;
+        margin: var(--space-2) 0;
+    }
+}
